@@ -30,6 +30,7 @@ import {
   readLdapGroups,
   readLdapUsers,
   resolveRelations,
+  resolveRelationsAsync,
 } from './read';
 import { RecursivePartial } from './util';
 import {
@@ -1033,6 +1034,37 @@ describe('readLdapGroups', () => {
 });
 
 describe('resolveRelations', () => {
+  it('yields to the event loop while resolving large organizations', async () => {
+    const users = Array.from({ length: 1_001 }, (_, index) =>
+      user({ metadata: { name: `user-${index}`, annotations: {} } }),
+    );
+    let eventLoopTurnCompleted = false;
+    setImmediate(() => {
+      eventLoopTurnCompleted = true;
+    });
+
+    await resolveRelationsAsync([], users, new Map(), new Map(), new Map());
+
+    expect(eventLoopTurnCompleted).toBe(true);
+  });
+
+  it('yields for entries without relations', async () => {
+    const userMemberOf = new Map(
+      Array.from({ length: 1_001 }, (_, index) => [
+        `user-${index}`,
+        new Set<string>(),
+      ]),
+    );
+    let eventLoopTurnCompleted = false;
+    setImmediate(() => {
+      eventLoopTurnCompleted = true;
+    });
+
+    await resolveRelationsAsync([], [], userMemberOf, new Map(), new Map());
+
+    expect(eventLoopTurnCompleted).toBe(true);
+  });
+
   describe('lookup', () => {
     it.each([LDAP_DN_ANNOTATION, LDAP_RDN_ANNOTATION, LDAP_UUID_ANNOTATION])(
       'matches by %s',
