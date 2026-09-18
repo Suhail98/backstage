@@ -1,5 +1,11 @@
 # @backstage/plugin-auth-backend-module-guest-provider
 
+## 0.2.24-next.0
+
+### Patch Changes
+
+- c2ea521: Change visibility to auth.providers.guest configuration key to be visible by frontend plugins to align with other authentication providers.
+
 ## 0.2.23
 
 ### Patch Changes

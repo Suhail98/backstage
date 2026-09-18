@@ -1,5 +1,12 @@
 # @backstage/plugin-app-module-user-settings
 
+## 0.1.3-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-user-settings@0.9.8-next.0
+
 ## 0.1.2
 
 ### Patch Changes

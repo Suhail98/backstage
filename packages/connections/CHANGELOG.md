@@ -1,5 +1,11 @@
 # @backstage/connections
 
+## 0.4.1-next.0
+
+### Patch Changes
+
+- e3b418c: Fixed the `Connection` type so that `auth` is a union of method variants instead of an array when no specific auth method is provided.
+
 ## 0.4.0
 
 ### Minor Changes

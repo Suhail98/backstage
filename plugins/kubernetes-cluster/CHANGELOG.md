@@ -1,5 +1,12 @@
 # @backstage/plugin-kubernetes-cluster
 
+## 0.0.42-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-catalog-react@3.2.4-next.0
+
 ## 0.0.41
 
 ### Patch Changes

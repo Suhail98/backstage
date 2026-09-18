@@ -1,5 +1,13 @@
 # @backstage/plugin-search
 
+## 1.7.9-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-catalog-react@3.2.4-next.0
+  - @backstage/plugin-home-react@0.1.43-next.0
+
 ## 1.7.8
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @backstage/backend-defaults
 
+## 0.18.1-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/backend-app-api@1.7.5-next.0
+  - @backstage/integration@2.1.3-next.0
+  - @backstage/integration-aws-node@0.2.3-next.0
+
 ## 0.18.0
 
 ### Minor Changes

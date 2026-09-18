@@ -1,5 +1,33 @@
 # example-app-legacy
 
+## 0.2.126-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/cli@0.36.7-next.0
+  - @backstage/integration-react@1.2.23-next.0
+  - @backstage/plugin-catalog-import@0.13.19-next.0
+  - @backstage/plugin-scaffolder@1.39.1-next.0
+  - @backstage/plugin-techdocs@1.18.2-next.0
+  - @backstage/plugin-techdocs-module-addons-contrib@1.1.41-next.0
+  - @backstage/plugin-catalog@2.0.10-next.0
+  - @backstage/plugin-catalog-react@3.2.4-next.0
+  - @backstage/plugin-scaffolder-react@2.1.1-next.0
+  - @backstage/frontend-app-api@0.16.9-next.0
+  - @backstage/plugin-api-docs@0.14.6-next.0
+  - @backstage/plugin-catalog-graph@0.6.9-next.0
+  - @backstage/plugin-catalog-unprocessed-entities@0.2.36-next.0
+  - @backstage/plugin-devtools@0.1.44-next.0
+  - @backstage/plugin-home@0.9.11-next.0
+  - @backstage/plugin-home-react@0.1.43-next.0
+  - @backstage/plugin-kubernetes@0.12.24-next.0
+  - @backstage/plugin-kubernetes-cluster@0.0.42-next.0
+  - @backstage/plugin-notifications@0.6.1-next.0
+  - @backstage/plugin-org@0.7.10-next.0
+  - @backstage/plugin-search@1.7.9-next.0
+  - @backstage/plugin-user-settings@0.9.8-next.0
+
 ## 0.2.125
 
 ### Patch Changes

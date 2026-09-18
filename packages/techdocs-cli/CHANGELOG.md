@@ -1,5 +1,13 @@
 # @techdocs/cli
 
+## 1.12.1-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/backend-defaults@0.18.1-next.0
+  - @backstage/plugin-techdocs-node@2.0.1-next.0
+
 ## 1.12.0
 
 ### Minor Changes

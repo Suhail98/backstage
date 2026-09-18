@@ -1,5 +1,14 @@
 # @backstage/backend-test-utils
 
+## 1.11.8-next.0
+
+### Patch Changes
+
+- 7728fcd: Improved test database cleanup reliability by shutting down independent database engines and removing their logical databases concurrently.
+- Updated dependencies
+  - @backstage/backend-app-api@1.7.5-next.0
+  - @backstage/backend-defaults@0.18.1-next.0
+
 ## 1.11.7
 
 ### Patch Changes

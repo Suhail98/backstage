@@ -1,5 +1,18 @@
 # @backstage/plugin-catalog-backend
 
+## 4.0.1-next.0
+
+### Patch Changes
+
+- 727d53f: Improve responsiveness to other requests while reading large sets of entities with field selection, without reducing page sizes.
+
+  Like full-entity responses, projected list responses may now be streamed without a `Content-Length` or automatically generated `ETag` header.
+
+- e783f4b: Fixed catalog processing error messages to report stable processor names in minified builds.
+- Updated dependencies
+  - @backstage/integration@2.1.3-next.0
+  - @backstage/plugin-catalog-node@2.2.6-next.0
+
 ## 4.0.0
 
 ### Major Changes

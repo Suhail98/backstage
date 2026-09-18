@@ -1,5 +1,12 @@
 # @backstage/plugin-search-backend-module-elasticsearch
 
+## 2.0.1-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/integration-aws-node@0.2.3-next.0
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,12 @@
 # @backstage/backend-app-api
 
+## 1.7.5-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/connections@0.4.1-next.0
+
 ## 1.7.4
 
 ### Patch Changes

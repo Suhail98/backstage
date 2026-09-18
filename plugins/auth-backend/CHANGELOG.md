@@ -1,5 +1,12 @@
 # @backstage/plugin-auth-backend
 
+## 0.30.2-next.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-catalog-node@2.2.6-next.0
+
 ## 0.30.1
 
 ### Patch Changes
