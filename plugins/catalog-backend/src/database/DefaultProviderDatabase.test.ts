@@ -18,6 +18,7 @@ import { mockServices, TestDatabases } from '@backstage/backend-test-utils';
 import { Entity, stringifyEntityRef } from '@backstage/catalog-model';
 import { Knex } from 'knex';
 import { randomUUID as uuid } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import { DefaultProviderDatabase } from './DefaultProviderDatabase';
 import { applyDatabaseMigrations } from './migrations';
 import { DbRefreshStateReferencesRow, DbRefreshStateRow } from './tables';
@@ -27,6 +28,130 @@ import { generateStableHash } from './util';
 jest.setTimeout(60_000);
 
 const databases = TestDatabases.create();
+
+describe('DefaultProviderDatabase mutation preparation', () => {
+  it.each(['full', 'delta'] as const)(
+    'yields to the event loop while preparing large %s mutations',
+    async type => {
+      let eventLoopTurnCompleted = false;
+      const db = new DefaultProviderDatabase({
+        database: {} as Knex,
+        logger: mockServices.logger.mock(),
+      });
+      setImmediate(() => {
+        eventLoopTurnCompleted = true;
+      });
+      let currentTime = 0;
+      const nowSpy = jest
+        .spyOn(performance, 'now')
+        .mockImplementation(() => currentTime++);
+
+      try {
+        const items = Array.from({ length: 10 }, (_, index) => ({
+          entity: {
+            apiVersion: 'backstage.io/v1alpha1',
+            kind: 'Component',
+            metadata: { name: `component-${index}` },
+          },
+        }));
+        const prepared = await db.prepareUnprocessedEntities(
+          type === 'full'
+            ? { type, sourceKey: 'test', items }
+            : { type, sourceKey: 'test', added: items, removed: [] },
+        );
+        expect(prepared.preparedItems).toHaveLength(items.length);
+      } finally {
+        nowSpy.mockRestore();
+      }
+
+      expect(eventLoopTurnCompleted).toBe(true);
+    },
+  );
+
+  it('yields while normalizing a large removal-only delta', async () => {
+    let eventLoopTurnCompleted = false;
+    const db = new DefaultProviderDatabase({
+      database: {} as Knex,
+      logger: mockServices.logger.mock(),
+    });
+    setImmediate(() => {
+      eventLoopTurnCompleted = true;
+    });
+    let currentTime = 0;
+    const nowSpy = jest
+      .spyOn(performance, 'now')
+      .mockImplementation(() => currentTime++);
+
+    try {
+      const removed = Array.from({ length: 10 }, (_, index) => ({
+        entity: {
+          apiVersion: 'backstage.io/v1alpha1',
+          kind: 'Component',
+          metadata: { name: `component-${index}` },
+        },
+      }));
+      const prepared = await db.prepareUnprocessedEntities({
+        type: 'delta',
+        sourceKey: 'test',
+        added: [],
+        removed,
+      });
+      if (prepared.type !== 'delta') {
+        throw new Error('Expected a prepared delta mutation');
+      }
+
+      expect(prepared.removed).toEqual(
+        removed.map((_, index) => ({
+          entityRef: `component:default/component-${index}`,
+          locationKey: undefined,
+        })),
+      );
+    } finally {
+      nowSpy.mockRestore();
+    }
+
+    expect(eventLoopTurnCompleted).toBe(true);
+  });
+
+  it('does not yield while copying already normalized removals', async () => {
+    let eventLoopTurnCompleted = false;
+    const eventLoopTurn = new Promise<void>(resolve => {
+      setImmediate(() => {
+        eventLoopTurnCompleted = true;
+        resolve();
+      });
+    });
+    const db = new DefaultProviderDatabase({
+      database: {} as Knex,
+      logger: mockServices.logger.mock(),
+    });
+    let currentTime = 0;
+    const nowSpy = jest
+      .spyOn(performance, 'now')
+      .mockImplementation(() => currentTime++);
+
+    try {
+      const removed = Array.from({ length: 10 }, (_, index) => ({
+        entityRef: `component:default/component-${index}`,
+      }));
+      const prepared = await db.prepareUnprocessedEntities({
+        type: 'delta',
+        sourceKey: 'test',
+        added: [],
+        removed,
+      });
+      if (prepared.type !== 'delta') {
+        throw new Error('Expected a prepared delta mutation');
+      }
+
+      expect(prepared.removed).toEqual(removed);
+      expect(eventLoopTurnCompleted).toBe(false);
+    } finally {
+      nowSpy.mockRestore();
+      await eventLoopTurn;
+    }
+  });
+});
 
 describe.each(databases.eachSupportedId())(
   'DefaultProviderDatabase, %p',
